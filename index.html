@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>The Little Things Collection</title>
+  <meta name="description" content="Heirloom gifts, family traditions, and personalized keepsakes — coming soon." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ivory: #f7f3eb;
+      --cream: #efe6d8;
+      --sand: #d9cbb8;
+      --blush: #e8cfc6;
+      --gold: #b8956c;
+      --gold-deep: #8f6f4a;
+      --ink: #3a322c;
+      --ink-soft: #6b5f55;
+      --line: rgba(58, 50, 44, 0.12);
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(1200px 600px at 70% -10%, rgba(232, 207, 198, 0.45), transparent 60%),
+        radial-gradient(900px 500px at 10% 110%, rgba(184, 149, 108, 0.18), transparent 55%),
+        linear-gradient(180deg, var(--ivory) 0%, var(--cream) 100%);
+      font-family: "Outfit", system-ui, sans-serif;
+      font-weight: 300;
+      letter-spacing: 0.01em;
+    }
+    .wrap {
+      min-height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 24px 36px;
+    }
+    .mark {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--gold-deep);
+      margin-bottom: 28px;
+    }
+    .card {
+      width: min(640px, 100%);
+      background: rgba(247, 243, 235, 0.72);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 48px 40px 40px;
+      text-align: center;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 24px 60px rgba(58, 50, 44, 0.06);
+    }
+    h1 {
+      margin: 0 0 14px;
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-weight: 500;
+      font-size: clamp(2.4rem, 6vw, 3.4rem);
+      line-height: 1.1;
+      color: var(--ink);
+    }
+    .rule {
+      width: 56px;
+      height: 1px;
+      margin: 0 auto 22px;
+      background: var(--gold);
+      opacity: 0.7;
+    }
+    .lede {
+      margin: 0 auto 28px;
+      max-width: 34rem;
+      color: var(--ink-soft);
+      font-size: 1.05rem;
+      line-height: 1.65;
+    }
+    .pill {
+      display: inline-block;
+      margin-bottom: 22px;
+      padding: 7px 14px;
+      border: 1px solid rgba(184, 149, 108, 0.35);
+      border-radius: 999px;
+      color: var(--gold-deep);
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+    form {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 8px;
+    }
+    input[type="email"] {
+      flex: 1 1 220px;
+      min-width: 200px;
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fffdf9;
+      color: var(--ink);
+      font: inherit;
+      outline: none;
+    }
+    input[type="email"]::placeholder { color: #9a8d82; }
+    input[type="email"]:focus {
+      border-color: rgba(184, 149, 108, 0.7);
+      box-shadow: 0 0 0 3px rgba(184, 149, 108, 0.15);
+    }
+    button {
+      padding: 14px 22px;
+      border: none;
+      border-radius: 999px;
+      background: var(--ink);
+      color: var(--ivory);
+      font: inherit;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.15s ease;
+    }
+    button:hover { background: #2c2621; }
+    button:active { transform: translateY(1px); }
+    .note {
+      margin: 16px 0 0;
+      font-size: 0.82rem;
+      color: var(--ink-soft);
+    }
+    .success {
+      display: none;
+      margin-top: 18px;
+      color: var(--gold-deep);
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.25rem;
+    }
+    .footer {
+      margin-top: 34px;
+      text-align: center;
+      color: var(--ink-soft);
+      font-size: 0.85rem;
+    }
+    .footer a {
+      color: var(--gold-deep);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(143, 111, 74, 0.35);
+    }
+    .footer a:hover { border-bottom-color: var(--gold-deep); }
+    @media (max-width: 520px) {
+      .card { padding: 36px 22px 28px; }
+      form { flex-direction: column; }
+      button, input[type="email"] { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="mark">The Little Things Collection</div>
+    <main class="card">
+      <div class="pill">Coming soon</div>
+      <h1>Keepsakes for the moments that matter</h1>
+      <div class="rule" aria-hidden="true"></div>
+      <p class="lede">
+        Personalized gifts, family traditions, and heirloom-inspired pieces —
+        made to feel thoughtful, elevated, and uniquely yours.
+      </p>
+      <form id="notify" action="#" method="post">
+        <label class="visually-hidden" for="email" style="position:absolute;left:-9999px">Email</label>
+        <input id="email" name="email" type="email" required placeholder="Your email for early access" autocomplete="email" />
+        <button type="submit">Notify me</button>
+      </form>
+      <p class="note">No spam — just a note when we open.</p>
+      <p class="success" id="thanks" role="status">You’re on the list. We’ll be in touch.</p>
+    </main>
+    <p class="footer">
+      <a href="https://www.instagram.com/littlethingscollectionco/" rel="noopener noreferrer" target="_blank">@littlethingscollectionco</a>
+      ·
+      <a href="mailto:hello@thelittlethingscollection.com">hello@thelittlethingscollection.com</a>
+    </p>
+  </div>
+  <script>
+    const form = document.getElementById('notify');
+    const thanks = document.getElementById('thanks');
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value.trim();
+      if (!email) return;
+      // Local capture until a form backend is wired (Formspree / Sheets / Shopify).
+      try {
+        const key = 'ltc_waitlist';
+        const list = JSON.parse(localStorage.getItem(key) || '[]');
+        if (!list.includes(email)) list.push(email);
+        localStorage.setItem(key, JSON.stringify(list));
+      } catch (_) {}
+      form.style.display = 'none';
+      document.querySelector('.note').style.display = 'none';
+      thanks.style.display = 'block';
+    });
+  </script>
+</body>
+</html>
