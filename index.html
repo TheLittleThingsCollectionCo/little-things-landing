@@ -142,6 +142,19 @@
       font-family: "Cormorant Garamond", Georgia, serif;
       font-size: 1.25rem;
     }
+    .error {
+      display: none;
+      margin: 16px auto 0;
+      max-width: 26rem;
+      color: var(--ink);
+      font-size: 0.92rem;
+      line-height: 1.5;
+    }
+    button:disabled {
+      opacity: 0.55;
+      cursor: wait;
+    }
+    button:disabled:hover { background: var(--ink); }
     .footer {
       margin-top: 34px;
       text-align: center;
@@ -179,6 +192,7 @@
       </form>
       <p class="note">No spam — just a note when we open.</p>
       <p class="success" id="thanks" role="status">You’re on the list. We’ll be in touch.</p>
+      <p class="error" id="form-error" role="alert">We couldn’t send that just now. Please try again in a moment.</p>
     </main>
     <p class="footer">
       <a href="https://www.instagram.com/littlethingscollectionco/" rel="noopener noreferrer" target="_blank">@littlethingscollectionco</a>
@@ -187,22 +201,83 @@
     </p>
   </div>
   <script>
+    // Paste the deployed Apps Script web app URL here (the /exec URL).
+    // Leave this empty until that deployment exists; signups then stay in localStorage.
+    const WAITLIST_ENDPOINT = "";
+
     const form = document.getElementById('notify');
     const thanks = document.getElementById('thanks');
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const email = document.getElementById('email').value.trim();
-      if (!email) return;
-      // Local capture until a form backend is wired (Formspree / Sheets / Shopify).
+    const formError = document.getElementById('form-error');
+    const emailInput = document.getElementById('email');
+    const submitButton = form.querySelector('button[type="submit"]');
+    const note = document.querySelector('.note');
+
+    function isValidEmail(value) {
+      return value.length <= 254 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+    }
+
+    function rememberEmail(email) {
       try {
         const key = 'ltc_waitlist';
-        const list = JSON.parse(localStorage.getItem(key) || '[]');
+        const stored = JSON.parse(localStorage.getItem(key) || '[]');
+        const list = Array.isArray(stored) ? stored : [];
         if (!list.includes(email)) list.push(email);
         localStorage.setItem(key, JSON.stringify(list));
       } catch (_) {}
+    }
+
+    function showSuccess() {
+      formError.style.display = 'none';
       form.style.display = 'none';
-      document.querySelector('.note').style.display = 'none';
+      note.style.display = 'none';
       thanks.style.display = 'block';
+    }
+
+    function showError() {
+      submitButton.disabled = false;
+      submitButton.textContent = 'Notify me';
+      formError.style.display = 'block';
+    }
+
+    emailInput.addEventListener('input', () => emailInput.setCustomValidity(''));
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = emailInput.value.trim();
+      if (!isValidEmail(email)) {
+        emailInput.setCustomValidity('Please enter a valid email address.');
+        emailInput.reportValidity();
+        return;
+      }
+      emailInput.setCustomValidity('');
+
+      rememberEmail(email);
+      formError.style.display = 'none';
+
+      const endpoint = WAITLIST_ENDPOINT.trim();
+      if (!endpoint) {
+        showSuccess();
+        return;
+      }
+
+      submitButton.disabled = true;
+      submitButton.textContent = 'Sending…';
+
+      try {
+        await fetch(endpoint, {
+          method: 'POST',
+          mode: 'no-cors',
+          body: new URLSearchParams({
+            email,
+            source: 'landing',
+            page: location.href,
+            ts: new Date().toISOString(),
+          }),
+        });
+        showSuccess();
+      } catch (_) {
+        showError();
+      }
     });
   </script>
 </body>
