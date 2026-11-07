@@ -155,6 +155,16 @@
       cursor: wait;
     }
     button:disabled:hover { background: var(--ink); }
+    #waitlist-link:not([hidden]) {
+      display: inline-block;
+      padding: 14px 22px;
+      border-radius: 999px;
+      background: var(--ink);
+      color: var(--ivory);
+      text-decoration: none;
+      font-weight: 400;
+    }
+    #waitlist-link:focus-visible { outline: 3px solid var(--gold); outline-offset: 4px; }
     .footer {
       margin-top: 34px;
       text-align: center;
@@ -185,14 +195,9 @@
         Personalized gifts, family traditions, and heirloom-inspired pieces —
         made to feel thoughtful, elevated, and uniquely yours.
       </p>
-      <form id="notify" action="#" method="post">
-        <label class="visually-hidden" for="email" style="position:absolute;left:-9999px">Email</label>
-        <input id="email" name="email" type="email" required placeholder="Your email for early access" autocomplete="email" />
-        <button type="submit">Notify me</button>
-      </form>
-      <p class="note">No spam — just a note when we open.</p>
-      <p class="success" id="thanks" role="status">You’re on the list. We’ll be in touch.</p>
-      <p class="error" id="form-error" role="alert">We couldn’t send that just now. Please try again in a moment.</p>
+      <p id="waitlist-unavailable" role="status">Email signup is temporarily unavailable. Please check back soon.</p>
+      <a id="waitlist-link" hidden rel="noopener noreferrer" target="_blank">Join the early access list</a>
+      <p class="note">Signup opens our secure Google-hosted form in a new tab.</p>
     </main>
     <p class="footer">
       <a href="https://www.instagram.com/littlethingscollectionco/" rel="noopener noreferrer" target="_blank">@littlethingscollectionco</a>
@@ -201,84 +206,15 @@
     </p>
   </div>
   <script>
-    // Paste the deployed Apps Script web app URL here (the /exec URL).
-    // Leave this empty until that deployment exists; signups then stay in localStorage.
+    // Set only after the receiver is approved, deployed, and tested.
     const WAITLIST_ENDPOINT = "";
-
-    const form = document.getElementById('notify');
-    const thanks = document.getElementById('thanks');
-    const formError = document.getElementById('form-error');
-    const emailInput = document.getElementById('email');
-    const submitButton = form.querySelector('button[type="submit"]');
-    const note = document.querySelector('.note');
-
-    function isValidEmail(value) {
-      return value.length <= 254 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+    if (/^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(WAITLIST_ENDPOINT)) {
+      const link = document.getElementById('waitlist-link');
+      link.href = WAITLIST_ENDPOINT;
+      link.hidden = false;
+      document.getElementById('waitlist-unavailable').hidden = true;
     }
-
-    function rememberEmail(email) {
-      try {
-        const key = 'ltc_waitlist';
-        const stored = JSON.parse(localStorage.getItem(key) || '[]');
-        const list = Array.isArray(stored) ? stored : [];
-        if (!list.includes(email)) list.push(email);
-        localStorage.setItem(key, JSON.stringify(list));
-      } catch (_) {}
-    }
-
-    function showSuccess() {
-      formError.style.display = 'none';
-      form.style.display = 'none';
-      note.style.display = 'none';
-      thanks.style.display = 'block';
-    }
-
-    function showError() {
-      submitButton.disabled = false;
-      submitButton.textContent = 'Notify me';
-      formError.style.display = 'block';
-    }
-
-    emailInput.addEventListener('input', () => emailInput.setCustomValidity(''));
-
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const email = emailInput.value.trim();
-      if (!isValidEmail(email)) {
-        emailInput.setCustomValidity('Please enter a valid email address.');
-        emailInput.reportValidity();
-        return;
-      }
-      emailInput.setCustomValidity('');
-
-      rememberEmail(email);
-      formError.style.display = 'none';
-
-      const endpoint = WAITLIST_ENDPOINT.trim();
-      if (!endpoint) {
-        showSuccess();
-        return;
-      }
-
-      submitButton.disabled = true;
-      submitButton.textContent = 'Sending…';
-
-      try {
-        await fetch(endpoint, {
-          method: 'POST',
-          mode: 'no-cors',
-          body: new URLSearchParams({
-            email,
-            source: 'landing',
-            page: location.href,
-            ts: new Date().toISOString(),
-          }),
-        });
-        showSuccess();
-      } catch (_) {
-        showError();
-      }
-    });
   </script>
 </body>
 </html>
+
