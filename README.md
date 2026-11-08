@@ -4,9 +4,9 @@ Coming-soon landing page. GitHub Pages publishes `main` at thelittlethingscollec
 
 ## Waitlist status
 
-**NOT OPERATIONAL. Receiver is not deployed; WAITLIST_ENDPOINT is empty.**
+**Receiver deployed and hosted-form receipt verified. Live website integration is NOT operational yet.**
 The November 7 revision to existing draft PR #6 replaces false-success/local-only capture.
-It has not changed the live site. Do not merge until deployment approval and real receipt verification.
+It has not changed the live site. Receiver deployment was approved and a real test row was independently verified. Keep this draft unmerged until signed-out testing, preview verification, and separate website approval.
 
 ### Proposed flow
 
@@ -32,8 +32,8 @@ do not publish the spreadsheet to the web, and do not share it with visitors.
 | Manifest | Show appsscript.json in project settings; use `docs/appsscript.json` |
 | Script timezone | America/New_York; row timestamps are UTC ISO strings |
 | OAuth scope | `https://www.googleapis.com/auth/spreadsheets` only |
-| Initial setup | Run `setup_` from the editor; this intentionally disables collection |
-| Script property SPREADSHEET_ID | Private bound Sheet ID (setup stores this automatically) |
+| Initial setup | Prepared Sheet already has headers. Set SPREADSHEET_ID and ENABLED in Project Settings → Script Properties. Private underscore functions are not listed in the editor Run selector. |
+| Script property SPREADSHEET_ID | Private bound Sheet ID (set in Script Properties) |
 | Script property ENABLED | `false` until public-receiver approval; `true` for approved testing/operation |
 | Sheet tab and columns | Waitlist; timestamp, email, source, page, request_id, consent |
 | Deployment type | Web app — **requires owner approval before creation** |
@@ -95,16 +95,18 @@ and remove test rows before any eventual mailing. No outgoing mail is part of th
    evidence. After Pages publishes, test from the live domain and independently confirm its row.
    Only then report production lead capture operational.
 
-## Current verification record (November 7, before receiver approval)
+## Current verification record (November 7, after receiver approval)
 
-- Prepared private native Sheet with correct headers; no signup rows.
-- Sheet permission and header/format readback completed via authenticated connector.
-- Receiver not created/deployed; no deployment ID or `/exec` URL exists in this work.
-- Local mock tests cover collector failures, retries and client receipts. They do not verify Google runtime,
-  Google authorization, browser integration, quotas, or real Sheet literal-text semantics.
-- All 17 local tests passed. A mobile Playwright browser check was attempted but could not start:
-  the environment has no Chromium executable. Real signed-out browser verification remains required.
-- End-to-end receipt: **NOT VERIFIED**. Production site: **UNCHANGED**.
+- Deployed Version 1 with the reviewed collector, HTML form and explicit spreadsheet-only OAuth scope.
+- Configured SPREADSHEET_ID privately and ENABLED=true. The Sheet remains private.
+- Submitted a reserved-domain test address using the hosted form. Independently confirmed row 2,
+  UTC timestamp 2026-11-08T00:48:36.707Z, and launch-notification-v1 consent through the authenticated Sheets connector.
+- Hosted form displayed its success message after the write. The email cell is stored as text, not a formula.
+- Deployed URL is configured in this draft branch's index.html. No main-branch or live-site update made.
+- Actual form test used the signed-in owner browser. Signed-out visitor submission, preview-to-receiver
+  flow, live-site verification and real quota/failure tests remain pending. Do not equate this result with production readiness.
+- All 17 local mock tests passed before deployment. The separate local Playwright runtime lacked Chromium;
+  actual receiver UI testing subsequently succeeded in the Google browser session.
 
 Run local checks with `node --test tests/waitlist.test.cjs`.
 

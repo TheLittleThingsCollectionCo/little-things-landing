@@ -119,7 +119,7 @@ test('empty or malformed endpoint exposes no signup or success',()=>{
   for(const endpoint of ['', 'https://evil.example/exec']) {
     const nodes={'waitlist-link':{hidden:true},'waitlist-unavailable':{hidden:false}};
     const ctx={document:{getElementById:id=>nodes[id]}};vm.createContext(ctx);
-    vm.runInContext(index.match(/<script>([\s\S]*?)<\/script>/)[1].replace('const WAITLIST_ENDPOINT = "";',`const WAITLIST_ENDPOINT = ${JSON.stringify(endpoint)};`),ctx);
+    vm.runInContext(index.match(/<script>([\s\S]*?)<\/script>/)[1].replace(/const WAITLIST_ENDPOINT = "[^"]*";/,`const WAITLIST_ENDPOINT = ${JSON.stringify(endpoint)};`),ctx);
     assert.equal(nodes['waitlist-link'].hidden,true);
     assert.equal(nodes['waitlist-unavailable'].hidden,false);
   }
