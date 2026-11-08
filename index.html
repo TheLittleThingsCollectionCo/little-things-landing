@@ -142,6 +142,29 @@
       font-family: "Cormorant Garamond", Georgia, serif;
       font-size: 1.25rem;
     }
+    .error {
+      display: none;
+      margin: 16px auto 0;
+      max-width: 26rem;
+      color: var(--ink);
+      font-size: 0.92rem;
+      line-height: 1.5;
+    }
+    button:disabled {
+      opacity: 0.55;
+      cursor: wait;
+    }
+    button:disabled:hover { background: var(--ink); }
+    #waitlist-link:not([hidden]) {
+      display: inline-block;
+      padding: 14px 22px;
+      border-radius: 999px;
+      background: var(--ink);
+      color: var(--ivory);
+      text-decoration: none;
+      font-weight: 400;
+    }
+    #waitlist-link:focus-visible { outline: 3px solid var(--gold); outline-offset: 4px; }
     .footer {
       margin-top: 34px;
       text-align: center;
@@ -172,13 +195,9 @@
         Personalized gifts, family traditions, and heirloom-inspired pieces —
         made to feel thoughtful, elevated, and uniquely yours.
       </p>
-      <form id="notify" action="#" method="post">
-        <label class="visually-hidden" for="email" style="position:absolute;left:-9999px">Email</label>
-        <input id="email" name="email" type="email" required placeholder="Your email for early access" autocomplete="email" />
-        <button type="submit">Notify me</button>
-      </form>
-      <p class="note">No spam — just a note when we open.</p>
-      <p class="success" id="thanks" role="status">You’re on the list. We’ll be in touch.</p>
+      <p id="waitlist-unavailable" role="status">Email signup is temporarily unavailable. Please check back soon.</p>
+      <a id="waitlist-link" hidden rel="noopener noreferrer" target="_blank">Join the early access list</a>
+      <p class="note">Signup opens our secure Google-hosted form in a new tab.</p>
     </main>
     <p class="footer">
       <a href="https://www.instagram.com/littlethingscollectionco/" rel="noopener noreferrer" target="_blank">@littlethingscollectionco</a>
@@ -187,23 +206,15 @@
     </p>
   </div>
   <script>
-    const form = document.getElementById('notify');
-    const thanks = document.getElementById('thanks');
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const email = document.getElementById('email').value.trim();
-      if (!email) return;
-      // Local capture until a form backend is wired (Formspree / Sheets / Shopify).
-      try {
-        const key = 'ltc_waitlist';
-        const list = JSON.parse(localStorage.getItem(key) || '[]');
-        if (!list.includes(email)) list.push(email);
-        localStorage.setItem(key, JSON.stringify(list));
-      } catch (_) {}
-      form.style.display = 'none';
-      document.querySelector('.note').style.display = 'none';
-      thanks.style.display = 'block';
-    });
+    // Set only after the receiver is approved, deployed, and tested.
+    const WAITLIST_ENDPOINT = "https://script.google.com/macros/s/AKfycbzWc3J4wQoq_UAGOXBUT5xv5CaKgWhBxgXWGl2WFUWsIqA0lMANk52MxAp-jlk70XVQ/exec";
+    if (/^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(WAITLIST_ENDPOINT)) {
+      const link = document.getElementById('waitlist-link');
+      link.href = WAITLIST_ENDPOINT;
+      link.hidden = false;
+      document.getElementById('waitlist-unavailable').hidden = true;
+    }
   </script>
 </body>
 </html>
+
